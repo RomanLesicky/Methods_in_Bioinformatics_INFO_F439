@@ -1,0 +1,19 @@
+# Gitignore to not upload the all the associated documents with this project that are not actual code
+
+
+# PDF files
+*.pdf
+
+# PowerPoint files
+*.ppt
+*.pptx
+
+# Word files
+*.doc
+*.docx
+
+# Temporary MS Office files
+~$*.doc
+~$*.docx
+~$*.ppt
+~$*.pptx
