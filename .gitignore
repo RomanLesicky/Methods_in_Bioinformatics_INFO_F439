@@ -1,5 +1,8 @@
 # Gitignore to not upload the all the associated documents with this project that are not actual code
 
+# Folders to ignore 
+Text/
+Slides/
 
 # PDF files
 *.pdf
