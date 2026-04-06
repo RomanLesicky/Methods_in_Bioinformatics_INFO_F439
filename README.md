@@ -10,7 +10,8 @@ Specify that the dataset is not uploaded here since it's too big for Githubs 100
 
 But also put all the links and the architecture of where the data is meant to be situated so like 
 
-Graph-Bert/
+```text
+Graph-Bert or Modified_Graph-Bert/
 ├── data/
 │   ├── ppi/
 │   │   ├── node
@@ -24,3 +25,4 @@ Graph-Bert/
 │   └── e.coli/
 │       ├── node
 │       └── link
+```
