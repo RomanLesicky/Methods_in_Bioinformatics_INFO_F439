@@ -1,0 +1,33 @@
+name: ppi-gbert-cu128
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip>=24
+  - setuptools>=69
+  - wheel
+  - numpy=1.26.*
+  - scipy=1.11.*
+  - scikit-learn=1.4.*
+  - networkx=3.2.*
+  - matplotlib=3.8.*
+  - packaging
+  - transformers=4.41.*
+  - pip:
+      # Official PyTorch CUDA 12.8 wheels
+      - --extra-index-url https://download.pytorch.org/whl/cu128
+      - torch==2.7.0+cu128
+      - torchvision==0.22.0+cu128
+      - torchaudio==2.7.0+cu128
+
+# Notes:
+# - This repo directly imports torch, transformers, numpy, scipy, scikit-learn,
+#   networkx and matplotlib.
+# - The training / preprocessing scripts use the modern transformers import path:
+#     transformers.models.bert.modeling_bert
+# - One legacy file in the broader Graph-Bert codebase may still use:
+#     transformers.modeling_bert
+#   If you ever run that file and hit an import error, change it to:
+#     transformers.models.bert.modeling_bert
