@@ -1,3 +1,5 @@
+# TO DO make a nice README
+
 Specify that the dataset is not uploaded here since it's too big for Githubs 100 Mb hardcap that is why it's in the gitignore. 
 
 | Dataset | Link | `dataset_name` in code |
