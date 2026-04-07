@@ -2,7 +2,7 @@
 
 ## Changes to the orignal code: 
 
-GPU selection + CPU limitation was added, these were changes in files script_1 / 2 / 3 and 4 in both the `Graph-BERT` and `Modiefied_Graph-BERT` folders.  
+GPU selection + CPU limitation was added, these were changes in files script_1 / 2 / 3 and 4 in both the `Graph-BERT` and `Modiefied_Graph-BERT` folders. These changes are clearly specified in each of the files via a docstring that explains each individual change. Overall, the behavior of the code was not altered just adapted to suit a shared laboratory cluster.  
 
 ## Dataset:
 
