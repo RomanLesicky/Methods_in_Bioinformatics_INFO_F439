@@ -1,3 +1,10 @@
+""" 
+There are one changes in this file that is marked with a #!.
+
+Added change here to be directly able to control which GPU is meant to be used to train the model + 
+code to directly cap the maximal amount of CPU cores that are allowed to be used. 
+"""
+
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -40,6 +47,21 @@ class MethodGraphBertNodeConstruct(BertPreTrainedModel):
 
     def train_model(self, max_epoch):
         t_begin = time.time()
+
+        #! Change here
+
+        device = self.device
+
+        for key in ["raw_embeddings", "wl_embedding", "int_embeddings", "hop_embeddings",
+                "X"]:
+            if self.data.get(key) is not None:
+                self.data[key] = self.data[key].to(device)
+
+        if self.data.get("A") is not None:
+            self.data["A"] = self.data["A"].to(device)
+
+        # From here the code is the same as the original Github 
+
         optimizer = optim.Adam(self.parameters(), lr=self.lr, weight_decay=self.weight_decay)
         for epoch in range(max_epoch):
             t_epoch_begin = time.time()
