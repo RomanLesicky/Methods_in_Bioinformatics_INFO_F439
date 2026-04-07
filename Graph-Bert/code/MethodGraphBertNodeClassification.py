@@ -112,12 +112,13 @@ class MethodGraphBertNodeClassification(BertPreTrainedModel):
             optimizer.step()
 
             self.eval()
-            output = self.forward(self.data['raw_embeddings'], self.data['wl_embedding'], self.data['int_embeddings'], self.data['hop_embeddings'], self.data['idx_val'])
-            output = output[1]
-            
+            with torch.no_grad():
+                output = self.forward(self.data['raw_embeddings'], self.data['wl_embedding'], self.data['int_embeddings'], self.data['hop_embeddings'], self.data['idx_val'])
+                output = output[1]
+
             loss_val = F.cross_entropy(output, self.data['y'][self.data['idx_val']])
             accuracy.data = {'true_y': self.data['y'][self.data['idx_val']],
-                             'pred_y': output.max(1)[1]}
+                     'pred_y': output.max(1)[1]}
             acc_val = accuracy.evaluate()
 
             #-------------------------
@@ -125,19 +126,20 @@ class MethodGraphBertNodeClassification(BertPreTrainedModel):
             output = self.forward(self.data['raw_embeddings'], self.data['wl_embedding'], self.data['int_embeddings'], self.data['hop_embeddings'], self.data['idx_test'])
             test_op = output[0]
             output = output[1]
-            
+
             loss_test = F.cross_entropy(output, self.data['y'][self.data['idx_test']])
             accuracy.data = {'true_y': self.data['y'][self.data['idx_test']],
-                             'pred_y': output.max(1)[1]}
-                             
+                     'pred_y': output.max(1)[1]}
             acc_test = accuracy.evaluate()
 
             self.learning_record_dict[epoch] = {'loss_train': loss_train.item(), 'acc_train': acc_train,
                                                 'loss_val': loss_val.item(), 'acc_val': acc_val,
                                                 'loss_test': loss_test.item(), 'acc_test': acc_test,
-                                                'test_acc_data': accuracy.data,
-                                                'test_op': test_op,
-                                                'time': time.time() - t_epoch_begin}
+                                                'test_acc_data': {'true_y': self.data['y'][self.data['idx_test']].detach().cpu(),
+                                                                  'pred_y': output.max(1)[1].detach().cpu(),},
+                                                                  'test_op': test_op.detach().cpu(),
+                                                                  'time': time.time() - t_epoch_begin,                
+                }
 
             # -------------------------
             if epoch % 10 == 0:
