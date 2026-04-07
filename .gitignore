@@ -21,13 +21,6 @@ Slides/
 ~$*.ppt
 ~$*.pptx
 
-# All the related Node and Link files which are too big for a GitHub repository, but these are listed in the README for how to download them
-
-**/c.elegan/node
-**/c.elegan/link
-**/drosophila/node
-**/drosophila/link
-**/e.coli/node
-**/e.coli/link
-**/ppi/node
-**/ppi/link
+# Large datasets that contain all the related Node and Link files which are too big for a GitHub repository, but these are listed in the README for how to download them 
+Graph-Bert/data/
+Modified_Graph-Bert/data/
