@@ -10,7 +10,16 @@ from code.Settings import Settings
 
 #--- ppi, c.elegan ----
 
-dataset_name = 'ppi'
+# The four datasets that have to be manually changed when running the code on the different datasets
+
+#dataset_name = 'ppi'
+
+dataset_name = 'c.elegan'
+
+#dataset_name = 'drosophila'
+
+#dataset_name = 'e.coli'
+
 
 np.random.seed(1)
 torch.manual_seed(1)

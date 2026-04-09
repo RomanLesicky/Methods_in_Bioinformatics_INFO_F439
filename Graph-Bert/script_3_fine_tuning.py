@@ -35,7 +35,15 @@ else:
 
 #---- 'cora' , 'citeseer', 'pubmed' ----
 
-dataset_name = 'ppi'
+# The four datasets that have to be manually changed when running the code on the different datasets
+
+#dataset_name = 'ppi'
+
+dataset_name = 'c.elegan'
+
+#dataset_name = 'drosophila'
+
+#dataset_name = 'e.coli'
 
 
 # These two lines were moved up so they are commented out:
