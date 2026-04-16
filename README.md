@@ -39,33 +39,13 @@ pip install transformers accelerate
 
 GPU selection + CPU limitation was added, these were changes in files script_1 / 2 / 3 and 4 in both the `Graph-BERT` and `Modiefied_Graph-BERT` folders. These changes are clearly specified in each of the files via a docstring that explains each individual change. Overall, the behavior of the code was not altered just adapted to suit a shared laboratory cluster.  
 
-## Dataset:
+## Dataset and SeqVec / ESM-2 weights:
 
-Specify that the dataset is not uploaded here since it's too big for Githubs 100 Mb hardcap that is why it's in the gitignore. 
+Concerning the original and produced datasets, and especially ESM-2 weights these are all present on this Google drive [https://drive.google.com/drive/folders/1ebuwW51Fo05qFbxVlUjVwS31oRxY5D06?usp=sharing]. This is due to GitHub's size limit for pushes and individual files. The specified google drive possess five different folders: 
 
-| Dataset | Link | `dataset_name` in code |
-|---|---|---|
-| Human PPI (HPRD benchmark) | [Google drive](https://drive.google.com/drive/folders/1KX9ybM_Mh2RXvqCmN7vJ2X_ywg12DJtq) | `ppi` |
-| C.elegans | [Google drive](https://drive.google.com/drive/folders/1vNPpyGYDFHjHd2ylB77SmAwnh0tG18Vw) | `c.elegan` |
-| Drosophila | [Google drive](https://drive.google.com/drive/folders/1_4oZZVvBFiub0FPOyQxVEmtZVM3kHqkQ) | `drosophila` |
-| E. coli | [Google drive](https://drive.google.com/drive/folders/1wK6S_bZIDWaxW9IIU_GukyWD_ateqL2P) | `e.coli` |
+1. `data` which contains the original data used by the authors, this same folder is also present in the `Graph-BERT` folder on this repository
+2. `esm-files`, which contains the ESM-2 dictionaries for the used datasets in the 650M and 3B parameter settings
+3. `Node_creation`, which contains the node files created for this project
+4. `S-VGAE` data which is the original data from which the authors have created their own node and link files, this was used in this project for the re-creation of the node files
+5. `seqvec_files`, which contain the SeqVec weight dictionaries that were produced for this project 
 
-
-But also put all the links and the architecture of where the data is meant to be situated so like 
-
-```text
-Graph-Bert or Modified_Graph-Bert/
-├── data/
-│   ├── ppi/
-│   │   ├── node
-│   │   └── link
-│   ├── c.elegan/
-│   │   ├── node
-│   │   └── link
-│   ├── drosophila/
-│   │   ├── node
-│   │   └── link
-│   └── e.coli/
-│       ├── node
-│       └── link
-```
