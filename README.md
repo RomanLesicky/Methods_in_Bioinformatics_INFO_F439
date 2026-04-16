@@ -23,6 +23,18 @@ python -m pip install "bio-embeddings[seqvec] @ git+https://github.com/sacdallag
 
 ## Environment installation ESM2:
 
+```bash
+
+# Or conda
+mamba create -n esm_emb python=3.10 pip -y
+
+mamba activate esm_emb
+
+pip install torch --index-url https://download.pytorch.org/whl/cu118
+
+pip install transformers accelerate
+```
+
 ## Changes to the orignal code of Graph-BERT: 
 
 GPU selection + CPU limitation was added, these were changes in files script_1 / 2 / 3 and 4 in both the `Graph-BERT` and `Modiefied_Graph-BERT` folders. These changes are clearly specified in each of the files via a docstring that explains each individual change. Overall, the behavior of the code was not altered just adapted to suit a shared laboratory cluster.  
