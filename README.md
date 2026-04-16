@@ -1,6 +1,10 @@
 # TO DO make a nice README
 
-## Changes to the orignal code: 
+# Mention the need for 3 different env !!! and explain which is what !!! 
+
+# Explain the whole ordeal of ESM2 and only running it on C.Elegan / Drosophila / E.Coli 
+
+## Changes to the orignal code of Graph-BERT: 
 
 GPU selection + CPU limitation was added, these were changes in files script_1 / 2 / 3 and 4 in both the `Graph-BERT` and `Modiefied_Graph-BERT` folders. These changes are clearly specified in each of the files via a docstring that explains each individual change. Overall, the behavior of the code was not altered just adapted to suit a shared laboratory cluster.  
 
