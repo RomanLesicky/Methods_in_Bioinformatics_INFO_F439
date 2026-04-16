@@ -22,6 +22,27 @@ Slides/
 ~$*.pptx
 
 # Large datasets that contain all the related Node and Link files which are too big for a GitHub repository, but these are listed in the README for how to download them 
+esm_files/C.elegan_esm2_t33_650M_UR50D_dict.npy
+esm_files/C.elegan_esm2_t36_3B_UR50D_dict.npy
+esm_files/Drosophila_esm2_t33_650M_UR50D_dict.npy
+esm_files/Drosophila_esm2_t36_3B_UR50D_dict.npy
+esm_files/E.coli_esm2_t33_650M_UR50D_dict.npy
+esm_files/E.coli_esm2_t36_3B_UR50D_dict.npy
+Node_creation/Hprd_Link_raw.txt
+Node_creation/Node_C.elegan_esm2_3B.txt
+Node_creation/Node_C.elegan_esm2_650M.txt
+Node_creation/Node_C.elegan_seqvec.txt
+Node_creation/Node_Drosophila_esm2_3B.txt
+Node_creation/Node_Drosophila_esm2_650M.txt
+Node_creation/Node_Drosophila_seqvec.txt
+Node_creation/Node_E.coli_esm2_3B.txt
+Node_creation/Node_E.coli_esm2_650M.txt
+Node_creation/Node_E.coli_seqvec.txt
+Node_creation/Node_Hprd_SeqVec_Moi.txt
+seqvec_files/C.elegan_seqvec_dict.npy
+seqvec_files/drosophila_seqvec_dict.npy
+seqvec_files/e.coli_seqvec_dict.npy
+seqvec_files/hprd_seqvec_dict.npy
 **/c.elegan/node 
 **/c.elegan/link 
 **/drosophila/node 
