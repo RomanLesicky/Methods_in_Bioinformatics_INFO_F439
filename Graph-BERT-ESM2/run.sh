@@ -35,7 +35,7 @@ echo "Running $SCRIPT | dataset=$DATASET | embedder=$EMBEDDER | cores=$NCORES"
 # Skip staging for script_1 (doesn't depend on embedder — any node file with
 # the right IDs works, and the existing one is fine).
 # Also skip for script_4 (reads results, not raw data).
-SCRIPTS_NEEDING_STAGE="script_2_pre_train.py script_3_fine_tuning.py"
+SCRIPTS_NEEDING_STAGE="script_1_preprocess.py script_2_pre_train.py script_3_fine_tuning.py"
  
 # Resolve paths relative to where this script lives (Graph-Bert/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
