@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import torch
 
@@ -8,50 +9,39 @@ from code.MethodHopDistance import MethodHopDistance
 from code.ResultSaving import ResultSaving
 from code.Settings import Settings
 
-#--- ppi, c.elegan ----
-
-# The four datasets that have to be manually changed when running the code on the different datasets
-
-dataset_name = 'ppi'
-
-#dataset_name = 'c.elegan'
-
-#dataset_name = 'drosophila'
-
-#dataset_name = 'e.coli'
-
+# Read dataset from env var set by run.sh
+dataset_name = os.environ.get('PPI_DATASET', 'ppi')
 
 np.random.seed(1)
 torch.manual_seed(1)
 
-#---- cora-small is for debuging only ----
+print(f"Preprocess dataset: {dataset_name}")
+
+# Optional: keep these for documentation only
 if dataset_name == 'ppi':
     nclass = 2
     nfeature = 2048
-    ngraph = 16324 #26324 
+    ngraph = 16324
 
-    
 elif dataset_name == 'c.elegan':
     nclass = 2
     nfeature = 2048
     ngraph = 4548
-        
+
 elif dataset_name == 'drosophila':
     nclass = 2
     nfeature = 2048
     ngraph = 26602
-    
-    
+
 elif dataset_name == 'e.coli':
     nclass = 2
     nfeature = 2048
     ngraph = 9607
 
-
 elif dataset_name == 'human':
     nclass = 2
     nfeature = 2048
-    ngraph = 56919  #27920
+    ngraph = 56919
 
 
 #---- Step 1: WL based graph coloring ----
