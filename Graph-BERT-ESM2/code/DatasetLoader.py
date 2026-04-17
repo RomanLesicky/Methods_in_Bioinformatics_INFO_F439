@@ -80,11 +80,21 @@ class DatasetLoader(dataset):
         return torch.sparse.FloatTensor(indices, values, shape)
 
     def encode_onehot(self, labels):
-        classes = set(labels)
-        classes_dict = {c: np.identity(len(classes))[i, :] for i, c in
-                        enumerate(classes)}
-        labels_onehot = np.array(list(map(classes_dict.get, labels)),
-                                 dtype=np.int32)
+        """
+        Deterministic binary label mapping:
+        Negative -> class 0
+        Positive -> class 1
+        """
+        classes_dict = {
+            'Negative': np.array([1, 0], dtype=np.int32),
+            'Positive': np.array([0, 1], dtype=np.int32),
+        }
+
+        unknown = sorted(set(labels) - set(classes_dict.keys()))
+        if unknown:
+            raise ValueError(f"Unknown labels encountered: {unknown}")
+
+        labels_onehot = np.array([classes_dict[label] for label in labels], dtype=np.int32)
         return labels_onehot
 
     def load(self):
