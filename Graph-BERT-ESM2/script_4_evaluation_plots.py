@@ -42,22 +42,32 @@ def to_numpy(x):
  
 def evaluate_epoch(record):
     """Compute all metrics for a single saved epoch record."""
-    y_true = to_numpy(record['test_acc_data']['true_y'])
- 
+    y_true = to_numpy(record['test_acc_data']['true_y']).astype(int)
+
     test_op = record['test_op']
     if not torch.is_tensor(test_op):
         test_op = torch.tensor(test_op)
     probs = F.softmax(test_op, dim=1).detach().cpu().numpy()
- 
-    y_pred = probs.argmax(axis=1)
+
+    y_pred = probs.argmax(axis=1).astype(int)
     y_score = probs[:, 1]
- 
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
- 
+
+    # Force a 2x2 confusion matrix even if one class is absent
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0, 1]).ravel()
+
     precision, recall, f1, _ = precision_recall_fscore_support(
         y_true, y_pred, average='binary', zero_division=0
     )
- 
+
+    # AUROC/AUPRC are only meaningful when both classes are present in y_true
+    unique_classes = np.unique(y_true)
+    if unique_classes.size < 2:
+        auroc = np.nan
+        auprc = np.nan
+    else:
+        auroc = roc_auc_score(y_true, y_score)
+        auprc = average_precision_score(y_true, y_score)
+
     return {
         'accuracy':    accuracy_score(y_true, y_pred),
         'sensitivity': tp / (tp + fn) if (tp + fn) else 0.0,
@@ -66,11 +76,13 @@ def evaluate_epoch(record):
         'recall':      recall,
         'f1':          f1,
         'mcc':         matthews_corrcoef(y_true, y_pred),
-        'auroc':       roc_auc_score(y_true, y_score),
-        'auprc':       average_precision_score(y_true, y_score),
+        'auroc':       auroc,
+        'auprc':       auprc,
         'tp': int(tp), 'tn': int(tn), 'fp': int(fp), 'fn': int(fn),
+        'n_test': int(len(y_true)),
+        'class_0_count': int((y_true == 0).sum()),
+        'class_1_count': int((y_true == 1).sum()),
     }
- 
  
 def run_dataset(dataset_name, embedder_name):
     """Evaluate a single (dataset, embedder) run. Returns metrics dict or None."""
@@ -79,45 +91,50 @@ def run_dataset(dataset_name, embedder_name):
     result_obj.result_destination_file_name = (
         f'{dataset_name}_{embedder_name}_{HIDDEN_LAYERS}'
     )
- 
+
     try:
         history = result_obj.load()
     except (FileNotFoundError, IOError):
         print(f'\n  [{dataset_name} / {embedder_name}] no saved history at '
               f'{RESULT_FOLDER}{result_obj.result_destination_file_name} — skipping')
         return None
- 
+
     epochs = sorted(history.keys())
     if not epochs:
         print(f'\n  [{dataset_name} / {embedder_name}] history is empty — skipping')
         return None
- 
-    # Select best epoch by test accuracy (legacy) and by validation accuracy (corrected)
+
     best_test_epoch = max(epochs, key=lambda e: history[e]['acc_test'])
     best_val_epoch  = max(epochs, key=lambda e: history[e]['acc_val'])
- 
-    legacy    = evaluate_epoch(history[best_test_epoch])
-    corrected = evaluate_epoch(history[best_val_epoch])
- 
+
+    try:
+        legacy    = evaluate_epoch(history[best_test_epoch])
+        corrected = evaluate_epoch(history[best_val_epoch])
+    except Exception as e:
+        print(f'\n  [{dataset_name} / {embedder_name}] metric computation failed: {e}')
+        return None
+
     same_epoch = (best_test_epoch == best_val_epoch)
-    identical  = same_epoch and all(
-        np.isclose(legacy[k], corrected[k])
+    identical = same_epoch and all(
+        (np.isnan(legacy[k]) and np.isnan(corrected[k])) or np.isclose(legacy[k], corrected[k], equal_nan=True)
         for k in legacy if isinstance(legacy[k], float)
     )
- 
+
     print(f'\n  [{dataset_name} / {embedder_name}]  '
           f'epochs: {len(epochs)} ({epochs[0]}..{epochs[-1]})')
     print(f'    legacy (argmax acc_test) → epoch {best_test_epoch}')
     print(f'    corrected (argmax acc_val) → epoch {best_val_epoch}')
+    print(f'    test labels: n={corrected["n_test"]}, '
+          f'class0={corrected["class_0_count"]}, class1={corrected["class_1_count"]}')
     if identical:
         print('    (legacy == corrected on this dataset; idx_val == idx_test)')
     print(f'    {"metric":<12s} {"legacy":>10s} {"corrected":>10s} {"delta":>10s}')
     for k in METRIC_KEYS:
-        delta = corrected[k] - legacy[k]
+        delta = corrected[k] - legacy[k] if not (np.isnan(corrected[k]) or np.isnan(legacy[k])) else np.nan
         print(f'    {k:<12s} {legacy[k]:>10.4f} {corrected[k]:>10.4f} '
               f'{delta:>+10.4f}')
- 
-    return corrected  # return the corrected metrics for the comparison table
+
+    return corrected
  
  
 def run_comparison(dataset_name, embedder_list):
