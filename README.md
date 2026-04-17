@@ -49,3 +49,63 @@ Concerning the original and produced datasets, and especially ESM-2 weights thes
 4. `S-VGAE` data which is the original data from which the authors have created their own node and link files, this was used in this project for the re-creation of the node files
 5. `seqvec_files`, which contain the SeqVec weight dictionaries that were produced for this project 
 
+
+## How to run the repository:
+
+
+```bash
+# Step 1 
+
+# To be ran in Methods/
+
+# C.elegan
+python pre-processing/generate_node_v2.py --dataset c.elegan --embedder seqvec
+python pre-processing/generate_node_v2.py --dataset c.elegan --embedder esm2_650M
+python pre-processing/generate_node_v2.py --dataset c.elegan --embedder esm2_3B
+
+# E.coli
+python pre-processing/generate_node_v2.py --dataset e.coli --embedder seqvec
+python pre-processing/generate_node_v2.py --dataset e.coli --embedder esm2_650M
+python pre-processing/generate_node_v2.py --dataset e.coli --embedder esm2_3B
+
+# Drosophila
+python pre-processing/generate_node_v2.py --dataset drosophila --embedder seqvec
+python pre-processing/generate_node_v2.py --dataset drosophila --embedder esm2_650M
+python pre-processing/generate_node_v2.py --dataset drosophila --embedder esm2_3B
+
+# Step 2 
+
+# To be ran in Methods/Graph-BERT-ESM2/
+
+./run.sh 8 0 script_1_preprocess.py c.elegan seqvec
+./run.sh 8 0 script_1_preprocess.py e.coli seqvec
+./run.sh 8 0 script_1_preprocess.py drosophila seqvec
+
+# Step 3 
+
+# To be ran in Methods/Graph-BERT-ESM2/
+
+for emb in seqvec esm2_650M esm2_3B; do
+    ./run.sh 8 0 script_2_pre_train.py  c.elegan "$emb"
+    ./run.sh 8 0 script_3_fine_tuning.py c.elegan "$emb"
+done
+
+for emb in seqvec esm2_650M esm2_3B; do
+    ./run.sh 8 0 script_2_pre_train.py  e.coli "$emb"
+    ./run.sh 8 0 script_3_fine_tuning.py e.coli "$emb"
+done
+
+for emb in seqvec esm2_650M esm2_3B; do
+    ./run.sh 8 0 script_2_pre_train.py  drosophila "$emb"
+    ./run.sh 8 0 script_3_fine_tuning.py drosophila "$emb"
+done
+
+
+# Step 4 
+
+# To be ran in Methods/Graph-BERT-ESM2
+
+python script_4_evaluation_plots.py --dataset all --embedder all
+
+```
+
